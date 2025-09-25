@@ -3,13 +3,20 @@ const https = require("https");
 const socketIo = require("socket.io");
 const cors = require("cors");
 const fs = require("fs");
+require("dotenv").config();
 
 const privateKey = fs.readFileSync("server.key", "utf8");
 const certificate = fs.readFileSync("server.crt", "utf8");
-const credentials = { key: privateKey, cert: certificate };
 
 const app = express();
-const server = https.createServer(credentials, app);
+const server = https.createServer(
+  {
+    key: privateKey,
+    cert: certificate,
+    passphrase: process.env.SERVER_PASSPHRASE,
+  },
+  app
+);
 const io = socketIo(server, {
   cors: {
     origin: "*", // Configure this for production

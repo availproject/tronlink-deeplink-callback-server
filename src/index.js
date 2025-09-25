@@ -5,15 +5,14 @@ const cors = require("cors");
 const fs = require("fs");
 require("dotenv").config();
 
-const privateKey = fs.readFileSync("server.key", "utf8");
-const certificate = fs.readFileSync("server.crt", "utf8");
+const privateKey = fs.readFileSync(process.env.SSL_KEY, "utf8");
+const certificate = fs.readFileSync(process.env.SSL_CERT, "utf8");
 
 const app = express();
 const server = https.createServer(
   {
     key: privateKey,
     cert: certificate,
-    passphrase: process.env.SERVER_PASSPHRASE,
   },
   app
 );

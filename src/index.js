@@ -21,6 +21,7 @@ const io = socketIo(server, {
   cors: {
     origin: "*", // Configure this for production
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 

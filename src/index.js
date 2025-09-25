@@ -1,10 +1,15 @@
 const express = require("express");
-const http = require("http");
+const https = require("https");
 const socketIo = require("socket.io");
 const cors = require("cors");
+const fs = require("fs");
+
+const privateKey = fs.readFileSync("server.key", "utf8");
+const certificate = fs.readFileSync("server.crt", "utf8");
+const credentials = { key: privateKey, cert: certificate };
 
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer(credentials, app);
 const io = socketIo(server, {
   cors: {
     origin: "*", // Configure this for production
@@ -435,14 +440,14 @@ server.listen(PORT, () => {
   console.log(`🚀  TronLink callback server running on port ${PORT}`);
   console.log(`📊 Features enabled:`);
   console.log(`   ✅ WebSocket callbacks (real-time)`);
-  console.log(`   ✅ HTTP polling callbacks (iOS compatibility)`);
+  console.log(`   ✅ HTTPs polling callbacks (iOS compatibility)`);
   console.log(`   ✅ Automatic callback cleanup (5min expiry)`);
   console.log(`   ✅ Bulk polling support`);
   console.log(`\n🔗 Available endpoints:`);
-  console.log(`   Health: http://localhost:${PORT}/health`);
-  console.log(`   Debug:  http://localhost:${PORT}/debug`);
-  console.log(`   Stats:  http://localhost:${PORT}/stats`);
-  console.log(`   Poll:   http://localhost:${PORT}/check-callback/:actionId`);
-  console.log(`   Test:   POST http://localhost:${PORT}/test-callback`);
+  console.log(`   Health: https://localhost:${PORT}/health`);
+  console.log(`   Debug:  https://localhost:${PORT}/debug`);
+  console.log(`   Stats:  https://localhost:${PORT}/stats`);
+  console.log(`   Poll:   https://localhost:${PORT}/check-callback/:actionId`);
+  console.log(`   Test:   POST https://localhost:${PORT}/test-callback`);
   console.log(`\n⏰ Cleanup runs every 2 minutes`);
 });
